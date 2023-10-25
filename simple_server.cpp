@@ -1,3 +1,4 @@
+/*连接1个客户端，收发1条消息*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
