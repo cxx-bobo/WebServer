@@ -24,7 +24,7 @@ void SqlConnPool::Init(const char* host, uint16_t port,
         connQue_.emplace(conn);
     }
     MAX_CONN_ = connSize;
-    sem_init(&semId_, 0, MAX_CONN_);
+    sem_init(&semId_, 0, MAX_CONN_);    //!为什么初始化时 信号量设置为最大连接数？
 }
 
 MYSQL* SqlConnPool::GetConn() {
@@ -40,7 +40,7 @@ MYSQL* SqlConnPool::GetConn() {
     return conn;
 }
 
-// 存入连接池，实际上没有关闭
+// 将连接指针存入连接池，实际上没有关闭
 void SqlConnPool::FreeConn(MYSQL* conn) {
     assert(conn);
     lock_guard<mutex> locker(mtx_);
@@ -48,6 +48,7 @@ void SqlConnPool::FreeConn(MYSQL* conn) {
     sem_post(&semId_);  // +1
 }
 
+//关闭数据库连接池
 void SqlConnPool::ClosePool() {
     lock_guard<mutex> locker(mtx_);
     while(!connQue_.empty()) {

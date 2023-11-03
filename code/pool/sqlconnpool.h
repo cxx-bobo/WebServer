@@ -26,11 +26,11 @@ private:
     SqlConnPool() = default;
     ~SqlConnPool() { ClosePool(); }
 
-    int MAX_CONN_;
+    int MAX_CONN_;  //最大连接数
 
-    std::queue<MYSQL *> connQue_;
-    std::mutex mtx_;
-    sem_t semId_;
+    std::queue<MYSQL *> connQue_;   //连接池队列
+    std::mutex mtx_;    //互斥锁
+    sem_t semId_;   //信号量
 };
 
 /* 资源在对象构造初始化 资源在对象析构时释放*/
